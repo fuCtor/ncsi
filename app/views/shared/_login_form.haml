@@ -1,0 +1,15 @@
+- if signed_in?
+  %h3
+    t 'user.success_login'
+
+- else
+  .container
+    .row
+      .col-xs-3.login
+        %a.btn{:href => user_omniauth_authorize_path('github')}
+          %i.icon-github
+          Github
+      .col-xs-3.login
+        %a.btn{:href => user_omniauth_authorize_path('vkontakte')}
+          %i.icon-vk
+          VKontakte

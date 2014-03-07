@@ -1,0 +1,34 @@
+ru:
+  main:
+    title: Мой NCSI
+
+  common:
+    show: Посмотреть
+    edit: Изменить
+    delete: Удалить
+    update: Обновить
+    save: Сохранить
+    cancel: Отмена
+    back: Назад
+    are_you_sure: Вы уверены?
+
+  user:
+    login: Войти
+    logout: Выйти
+
+  computer:
+    list: Список подключенных компьютеров
+    new: Добавить компьютер
+    edit: Изменить данные
+    created: Компьютер добавлен.
+    updated: Информация обновлена.
+    key_install: REG файл
+    default: Стандартные настройки
+
+  mongoid:
+    attributes:
+      computer:
+        name: Имя
+        ip: IP-адрес
+        visited_at: Посетил
+

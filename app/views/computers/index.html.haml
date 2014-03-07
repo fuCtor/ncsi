@@ -1,0 +1,8 @@
+- if signed_in?
+  %h1= t 'computer.list'
+  = render 'list'
+
+  = new_link_to t('computer.new'), new_computer_path(anchor: "addComputerForm"), :data => { :toggle=>"modal"}
+  = link_to '/default.reg', class: 'btn btn-default' do
+    %i.glyphicon.glyphicon-save
+    = t('computer.default')

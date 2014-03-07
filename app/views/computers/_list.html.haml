@@ -1,0 +1,26 @@
+%table.table
+  %thead
+    %tr
+      %th{:width => '40%'}= Computer.human_attribute_name :name
+      %th= Computer.human_attribute_name :ip
+      %th= Computer.human_attribute_name :visited_at
+      %th
+  %tbody
+    = render @computers
+
+#addComputerForm.modal.fade{:tabindex=>"-1", :role=>"dialog", :aria => { :labelledby=>"myModalLabel", :hidden=>"true"} }
+  .modal-dialog
+    .modal-content
+      = form_for @computer do |f|
+        .modal-header
+          %button.close{:type=>"button", :data => {:dismiss=>"modal"},  :aria => {:hidden=>"true"}} &times
+          %h4.modal-title= t 'computer.new'
+        .modal-body
+          %fieldset
+            .form-group
+              %label.col-md-3.control-label= Computer.human_attribute_name :name
+              .col-md-9= f.text_field :name, :class => 'form-control'
+
+        .modal-footer
+          %button.btn.btn-default{:type=>"button", :data => {:dismiss=>"modal" }}= t 'common.cancel'
+          = f.submit value: t('common.save'), class: 'btn btn-primary'

@@ -1,0 +1,14 @@
+%ul.nav.navbar-nav.navbar-right{:id => 'userInfo'}
+  - if signed_in?
+    %li.dropdown
+      %a.dropdown-toggle{:href => '#', :data => {:toggle => 'dropdown'}}
+        = decorated_user.avatar
+        = decorated_user.name
+        %i.caret
+      %ul.dropdown-menu
+        %li
+          %a{:href => destroy_user_session_path}= t('user.logout')
+  - else
+    %li
+      %a{ :data => { :toggle=>"modal"},  :href=>"#loginWindow" }= t('user.login')
+

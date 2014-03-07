@@ -1,0 +1,12 @@
+%tr
+  %td= computer.name
+  %td= computer.ip if can? :manage, computer
+  %td= computer.visited_at if can? :manage, computer
+  %td
+    .btn-group
+      - if can? :read, computer
+        = link_to key_computer_path(computer, format: 'reg'), class: 'btn btn-primary' do
+          %i.glyphicon.glyphicon-save
+          = t 'computer.key_install'
+      = edit_link_to edit_computer_path(computer), role: 'button' if can? :manage, computer
+      = destroy_link_to computer, role: 'button' if can? :manage, computer
