@@ -16,5 +16,6 @@
 /log/*.log
 /tmp
 
+/shared
 /config/mongoid.yml
 /config/provider.yml

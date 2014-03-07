@@ -1,38 +1,70 @@
 # config valid only for Capistrano 3.1
 lock '3.1.0'
 
-set :application, 'my_app_name'
-set :repo_url, 'git@example.com:me/my_repo.git'
+set :application, 'nsci'
+set :repo_url, 'git@git.internal.vmp.ru:ajieks/auth-center.git'
 
-# Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+set :deploy_to, '/opt/www/nsci'
+set :scm, :git
 
-# Default deploy_to directory is /var/www/my_app
-# set :deploy_to, '/var/www/my_app'
+set :deploy_via, :remote_cache
 
-# Default value for :scm is :git
-# set :scm, :git
-
-# Default value for :format is :pretty
 # set :format, :pretty
-
-# Default value for :log_level is :debug
 # set :log_level, :debug
-
-# Default value for :pty is false
 # set :pty, true
 
-# Default value for :linked_files is []
-# set :linked_files, %w{config/database.yml}
+set :linked_files, %w{config/mongoid.yml}
+set :linked_dirs, %w{bin log tmp vendor/bundle public/assets}
 
-# Default value for linked_dirs is []
-# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
-
-# Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
-
-# Default value for keep_releases is 5
 # set :keep_releases, 5
+
+namespace :unicorn do
+  pid_path = "#{release_path}/tmp/pids"
+  unicorn_pid = "#{pid_path}/unicorn.pid"
+
+  def run_unicorn
+    execute "#{fetch(:bundle_binstubs)}/unicorn", "-c #{release_path}/config/unicorn.rb -D -E #{fetch(:stage)}"
+  end
+
+  desc 'Start unicorn'
+  task :start do
+    on roles(:app) do
+      run_unicorn
+    end
+  end
+
+  desc 'Stop unicorn'
+  task :stop do
+    on roles(:app) do
+      if test "[ -f #{unicorn_pid} ]"
+        execute :kill, "-QUIT `cat #{unicorn_pid}`"
+      end
+    end
+  end
+
+  desc 'Force stop unicorn (kill -9)'
+  task :force_stop do
+    on roles(:app) do
+      if test "[ -f #{unicorn_pid} ]"
+        execute :kill, "-9 `cat #{unicorn_pid}`"
+        execute :rm, unicorn_pid
+      end
+    end
+  end
+
+  desc 'Restart unicorn'
+  task :restart do
+    on roles(:app) do
+      if test "[ -f #{unicorn_pid} ]"
+        execute :kill, "-USR2 `cat #{unicorn_pid}`"
+      else
+        run_unicorn
+      end
+    end
+  end
+end
+
 
 namespace :deploy do
 
@@ -40,19 +72,37 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
     end
   end
 
-  after :publishing, :restart
+  before :finishing, :create_tmp do
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        execute :rake, 'tmp:create'
+      end
+    end
+  end
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+      within release_path do
+        execute :bundle, 'exec', 'rake', 'tmp:clear'
+      end
     end
   end
+
+  before :symlink, :upload_config do
+    on roles(:all) do
+      execute "mkdir  #{shared_path}/config/"
+
+      upload!('shared/mongoid.yml', "#{shared_path}/config/mongoid.yml")
+      upload!('shared/provider.yml', "#{shared_path}/config/provider.yml")
+
+    end
+  end
+
+  after :finishing, 'deploy:cleanup'
+  after :finishing, 'unicorn:restart'
 
 end
