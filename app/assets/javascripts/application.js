@@ -15,3 +15,11 @@
 //= require turbolinks
 //= require 'bootstrap'
 //= require_tree .
+
+$(window).load(function() {
+    $('#welcome').bind('closed.bs.alert', function () {
+        $.cookie('hide_welcome', 1, { expires: 365 });
+    })
+}) ;
+
+
