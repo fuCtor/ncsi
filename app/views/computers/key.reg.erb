@@ -2,16 +2,14 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NlaSvc\Parameters\Internet]
 "ActiveWebProbePathV6"="check/<%= @computer.key %>"
-"ActiveWebProbePath"="check/<%= @computer.key %>"
-"ActiveDnsProbeHost"="dns.msftncsi.com"
-"EnableActiveProbing"=dword:00000001
-"PassivePollPeriod"=dword:0000000f
 "ActiveWebProbeContentV6"="<%= current_user.key %>"
 "ActiveDnsProbeContentV6"="fd3e:4f5a:5b81::1"
+"ActiveWebProbeHostV6"="<%= request.host %>"
+"ActiveDnsProbeHostV6"="dns.msftncsi.com"
+"ActiveWebProbePath"="check/<%= @computer.key %>"
+"ActiveDnsProbeHost"="dns.msftncsi.com"
 "ActiveWebProbeContent"="<%= current_user.key %>"
 "ActiveDnsProbeContent"="131.107.255.255"
 "ActiveWebProbeHost"="<%= request.host %>"
 "StaleThreshold"=dword:0000001e
-"ActiveWebProbeHostV6"="<%= request.host %>"
 "WebTimeout"=dword:00000023
-"ActiveDnsProbeHostV6"="dns.msftncsi.com"
