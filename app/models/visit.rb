@@ -1,6 +1,6 @@
 class Visit
   include Mongoid::Document
-  include Mongoid::Timestamp
+  include Mongoid::Timestamps
 
   field :ip
   field :comment

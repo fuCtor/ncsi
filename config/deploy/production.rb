@@ -1,2 +1,2 @@
-server 'my-nsci.info', user: 'deploy', roles: %w{web app}
+server 'my-ncsi.info', user: 'deploy', roles: %w{web app}
 

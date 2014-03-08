@@ -13,7 +13,7 @@ set :deploy_via, :remote_cache
 # set :log_level, :debug
 # set :pty, true
 
-set :linked_files, %w{config/mongoid.yml}
+set :linked_files, %w{config/mongoid.yml config/provider.yml}
 set :linked_dirs, %w{bin log tmp vendor/bundle public/assets}
 
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -77,6 +77,7 @@ namespace :deploy do
 
   before :finishing, :create_tmp do
     on roles(:app), in: :sequence, wait: 5 do
+      upload!('./shared/devise.rb', "#{release_path}/config/initializers/devise.rb")
       within release_path do
         execute :rake, 'tmp:create'
       end
@@ -92,12 +93,10 @@ namespace :deploy do
     end
   end
 
-  before :symlink, :upload_config do
-    on roles(:all) do
-      execute "mkdir  #{shared_path}/config/"
-
-      upload!('shared/mongoid.yml', "#{shared_path}/config/mongoid.yml")
-      upload!('shared/provider.yml', "#{shared_path}/config/provider.yml")
+  task :upload_config do
+    on roles(:web, :app) do
+      upload!('./shared/mongoid.yml', "#{shared_path}/config/mongoid.yml")
+      upload!('./shared/provider.yml', "#{shared_path}/config/provider.yml")
 
     end
   end
@@ -106,3 +105,5 @@ namespace :deploy do
   after :finishing, 'unicorn:restart'
 
 end
+
+before 'deploy:symlink:shared', 'deploy:upload_config'

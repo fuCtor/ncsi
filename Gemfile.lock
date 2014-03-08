@@ -142,6 +142,7 @@ GEM
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)
+    newrelic_rpm (3.7.3.199)
     oauth2 (0.9.3)
       faraday (>= 0.8, < 0.10)
       jwt (~> 0.1.8)
@@ -270,6 +271,7 @@ DEPENDENCIES
   jquery-rails
   mongoid!
   mongoid-versioning!
+  newrelic_rpm
   omniauth
   omniauth-github
   omniauth-vkontakte
