@@ -2,7 +2,7 @@
 lock '3.1.0'
 
 set :application, 'nsci'
-set :repo_url, 'git@git.internal.vmp.ru:ajieks/auth-center.git'
+set :repo_url, 'https://github.com/fuCtor/ncsi.git'
 
 set :deploy_to, '/opt/www/nsci'
 set :scm, :git
