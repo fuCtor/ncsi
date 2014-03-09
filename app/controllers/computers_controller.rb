@@ -34,17 +34,7 @@ class ComputersController < ApplicationController
     begin
       @computer = Computer.where(key: params[:key]).first
       if @computer
-        if @computer.ip != request.remote_ip
-          @computer.ip = request.remote_ip
-          @computer.visited_at = Time.now
-          @computer.save
-        else
-          @computer.versionless do |doc|
-            @computer.visited_at = Time.now
-            @computer.save
-          end
-        end
-
+        @computer.track! request.env['HTTP_X_REAL_IP'] || request.remote_ip
 
         render text: @computer.user.key, content_type: "text/plain"
       else
