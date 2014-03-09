@@ -37,7 +37,8 @@
             .modal-footer
               %button.btn.btn-default{:type=>"button", :data => {:dismiss=>"modal" }}= t 'common.cancel'
       .container.main
-        = render 'shared/welcome'
+        - unless @not_found_path
+          = render 'shared/welcome'
         = render 'shared/messages'
         = yield
       %footer.vector-footer

@@ -11,7 +11,8 @@ ru:
     cancel: Отмена
     back: Назад
     are_you_sure: Вы уверены?
-
+  error:
+    not_found: запрошенный путь %{path} не найден
   user:
     login: Войти
     logout: Выйти

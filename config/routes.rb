@@ -17,5 +17,6 @@ MyNsci::Application.routes.draw do
 
   get '/check/:key' => 'computers#check', as: :check
 
+  match '*path' => 'application#render_404', via: [:get, :post]
   root to: 'computers#index'
 end
